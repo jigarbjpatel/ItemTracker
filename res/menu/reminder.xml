@@ -1,11 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_reminder"
+        android:id="@+id/action_items"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="@string/action_reminder"/>
-    
+        android:title="@string/action_items_master"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

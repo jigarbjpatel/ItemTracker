@@ -24,32 +24,43 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int RelativeLayout01=0x7f080005;
-        public static final int action_settings=0x7f080008;
+        public static final int RelativeLayout01=0x7f080009;
+        public static final int action_items=0x7f08000e;
+        public static final int action_reminder=0x7f08000c;
+        public static final int action_settings=0x7f08000d;
         public static final int btnAdd=0x7f080001;
-        public static final int btnSaveItem=0x7f080004;
-        public static final int itemName=0x7f080006;
-        public static final int itemRemindDays=0x7f080007;
+        public static final int btnSaveItem=0x7f080008;
+        public static final int itemName=0x7f08000a;
+        public static final int itemRemindDays=0x7f08000b;
         public static final int itemsListview=0x7f080000;
-        public static final int txtName=0x7f080002;
-        public static final int txtRemindInDays=0x7f080003;
+        public static final int listToday=0x7f080003;
+        public static final int listTommorow=0x7f080005;
+        public static final int txtName=0x7f080006;
+        public static final int txtRemindInDays=0x7f080007;
+        public static final int txtToday=0x7f080002;
+        public static final int txtTomorrow=0x7f080004;
     }
     public static final class layout {
         public static final int activity_items_master=0x7f030000;
-        public static final int add_new_item=0x7f030001;
-        public static final int items_row_layout=0x7f030002;
+        public static final int activity_reminder=0x7f030001;
+        public static final int add_new_item=0x7f030002;
+        public static final int items_row_layout=0x7f030003;
     }
     public static final class menu {
         public static final int items_master=0x7f070000;
+        public static final int reminder=0x7f070001;
     }
     public static final class string {
-        public static final int RemindInDays=0x7f050006;
+        public static final int RemindInDays=0x7f050008;
+        public static final int action_items_master=0x7f050003;
+        public static final int action_reminder=0x7f050002;
         public static final int action_settings=0x7f050001;
-        public static final int addItemHint=0x7f050003;
-        public static final int addNewItemButton=0x7f050004;
+        public static final int addItemHint=0x7f050005;
+        public static final int addNewItemButton=0x7f050006;
         public static final int app_name=0x7f050000;
-        public static final int hello_world=0x7f050002;
-        public static final int saveItemButton=0x7f050005;
+        public static final int hello_world=0x7f050004;
+        public static final int saveItemButton=0x7f050007;
+        public static final int title_activity_reminder=0x7f050009;
     }
     public static final class style {
         /** 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -126,6 +127,15 @@ public class ItemsMaster extends Activity {
 		getMenuInflater().inflate(R.menu.items_master, menu);
 		return true;
 	}
-	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    if(item.getTitle().equals("Track")){
+	    	Intent intent = new Intent(ItemsMaster.this, ReminderActivity.class);
+	    	intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+	    	startActivity(intent);
+	    	return true;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}	
 	
 }

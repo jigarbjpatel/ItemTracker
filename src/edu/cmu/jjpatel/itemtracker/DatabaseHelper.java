@@ -101,6 +101,26 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 new String[] { String.valueOf(itemId) });
         db.close();
     }
+
+	public List<Item> getAllItemsByDaysLeft() {
+		List<Item> itemList = new ArrayList<Item>();
+        String selectQuery = "SELECT  id,name,daysLeft FROM " + ITEM_TABLE + " ORDER BY daysLeft";
+ 
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        int daysLeft=0;
+        if (cursor.moveToFirst()) {
+            do {            	
+            	if(cursor.getString(2) != null){
+            		daysLeft = Integer.parseInt(cursor.getString(2));
+            	}
+            	Item i = new Item(Integer.parseInt(cursor.getString(0)),
+                        cursor.getString(1), daysLeft);
+            	itemList.add(i);
+            } while (cursor.moveToNext());
+        }
+        return itemList;
+ 	}
  
    /* public int getItemsCount() {
         String countQuery = "SELECT  * FROM " + ITEM_TABLE;
