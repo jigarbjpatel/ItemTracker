@@ -53,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     	ContentValues values = new ContentValues();
     	values.put("name", i.getName());
     	values.put("remindDays", i.getRemindDays());
+    	values.put("daysLeft",i.getDaysLeft());
     	db.insert(ITEM_TABLE, null, values);
     	db.close();
     }
@@ -90,7 +91,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put("name", i.getName());
         values.put("remindDays", i.getRemindDays());
- 
+        values.put("daysLeft", i.getDaysLeft());
         return db.update(ITEM_TABLE, values, "id = ?",
                 new String[] { String.valueOf(i.getId()) });
     }
@@ -102,20 +103,28 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.close();
     }
 
-	public List<Item> getAllItemsByDaysLeft() {
+	public List<Item> getAllItemsByDaysLeft(int daysLeftFrom,int daysLeftTo) {
 		List<Item> itemList = new ArrayList<Item>();
-        String selectQuery = "SELECT  id,name,daysLeft FROM " + ITEM_TABLE + " ORDER BY daysLeft";
- 
+		int remindDays = 0;
+        int daysLeft = 0;
+        
+		String selectQuery = "SELECT  id,name,remindDays,daysLeft FROM " + ITEM_TABLE;
+        if(daysLeftTo != -1)
+        		selectQuery += " WHERE daysLeft >= "+daysLeftFrom+ " and daysLeft <= " + daysLeftTo;        		
+       	else
+        	selectQuery += " WHERE daysLeft >= "+daysLeftFrom;        
+        selectQuery += " ORDER BY daysLeft";
+        
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-        int daysLeft=0;
         if (cursor.moveToFirst()) {
             do {            	
-            	if(cursor.getString(2) != null){
-            		daysLeft = Integer.parseInt(cursor.getString(2));
-            	}
+            	if(cursor.getString(2) != null)
+            		remindDays = Integer.parseInt(cursor.getString(2));
+            	if(cursor.getString(3) != null)
+            		daysLeft = Integer.parseInt(cursor.getString(3));
             	Item i = new Item(Integer.parseInt(cursor.getString(0)),
-                        cursor.getString(1), daysLeft);
+                        cursor.getString(1), remindDays, daysLeft);
             	itemList.add(i);
             } while (cursor.moveToNext());
         }

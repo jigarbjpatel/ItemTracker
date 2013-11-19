@@ -21,13 +21,24 @@
         android:layout_height="wrap_content" >
     </ListView>
     <TextView
-        android:id="@+id/txtTomorrow"
+        android:id="@+id/txtThisWeek"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#55000000"
-        android:text="Tomorrow" />
+        android:text="This Week" />
     <ListView
-        android:id="@+id/listTommorow"
+        android:id="@+id/listThisWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+    <TextView
+        android:id="@+id/txtLater"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#55000000"
+        android:text="Later" />
+    <ListView
+        android:id="@+id/listLater"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ListView>

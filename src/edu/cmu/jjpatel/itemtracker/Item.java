@@ -9,12 +9,21 @@ public class Item {
 	public Item(){
 		
 	}
+	public Item(int id, String name){
+		this.id= id;
+		this.name = name;
+	}
 	public Item(int id, String name, int remindDays){
 		this.id = id;
 		this.name = name;
 		this.remindDays = remindDays;
 	}
-	
+	public Item(int id, String name, int remindDays, int daysLeft){
+		this.id = id;
+		this.name = name;
+		this.remindDays = remindDays;
+		this.daysLeft = daysLeft;
+	}
 	public String getName(){
 		return name;
 	}

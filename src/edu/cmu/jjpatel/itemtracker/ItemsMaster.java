@@ -56,6 +56,7 @@ public class ItemsMaster extends Activity {
 					Item i=new Item();
 					i.setName(itemName);
 					i.setRemindDays(Integer.parseInt(txtRemindInDays.getText().toString()));
+					i.setDaysLeft(0);//set days left as 0 by default
 					items.add(i);
 					dbHelper.addItem(i);
 					adapter.notifyDataSetChanged();
@@ -67,6 +68,7 @@ public class ItemsMaster extends Activity {
 		});		 
 		d.show();
 	}
+	//Called when the context menu is about to be shown
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
 	      super.onCreateContextMenu(menu, v, menuInfo);
