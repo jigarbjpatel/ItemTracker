@@ -15,6 +15,15 @@
     <string name="Today"> Today</string>
     <string name="ThisWeek"> This Week</string>
     <string name="Later"> Later</string>
-    <string name="Quantity">Quantity</string>
+    <string name="QuantityBought">Quantity Bought</string>
     <string name="BuyDate">Buy date</string>
+    <string name="title_activity_settings">Settings</string>
+	<string name="pref_send_notification">Send Notification</string>
+    <string name="pref_send_notification_summary">Notify when items running low</string>
+    <string name="pref_notification_before_summary">Days before notification should appear</string>
+    <string name="pref_notification_before">Notify before</string>
+    <string name="pref_notification">Notification Settings</string>
+    <string name="pref_notification_time_summary">Time at which you would like to be noitified</string>
+    <string name="pref_notification_time">Notification Time</string>
+     
 </resources>

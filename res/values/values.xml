@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="notificationBefore">
+        <item name="0">On last day</item>
+        <item name="1">On previous day</item>
+        <item name="2">Two days</item>
+        <item name="3">Three days</item>
+        <item name="4">One Week</item>
+    </string-array>
+    <string-array name="notificationBeforeValues">
+        <item name="0">0</item>
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+        <item name="4">7</item>
+    </string-array>
+</resources>

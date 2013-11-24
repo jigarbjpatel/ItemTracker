@@ -11,23 +11,25 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class ItemUpdateService extends Service {
 	private WakeLock mPartialWakeLock;
 	public ItemUpdateService() {
-		
+
 	}
 
 	// This is the old onStart method that will be called on the pre-2.0
 	// platform.  On 2.0 or later we override onStartCommand() so this method will not be called.
 	@Override
 	public void onStart(Intent intent, int startId) {
-	    handleCommand(intent);
+		handleCommand(intent);
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -52,13 +54,13 @@ public class ItemUpdateService extends Service {
 		// do the actual work, in a separate thread 
 		new UpdateItemTask().execute();		
 	}
-	
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		//throw new UnsupportedOperationException("Not yet implemented");
 		return null;
 	}
-	
+
 	private class UpdateItemTask extends AsyncTask<Void, Void, List<String>>{
 		/**
 		 * Returns the list of items due today (getting over today or are already over)
@@ -67,11 +69,15 @@ public class ItemUpdateService extends Service {
 		protected List<String> doInBackground(Void... params) {
 			//TODO: Update the database based on lastUpdate date - take care of thread synchronization
 			DatabaseHelper dbHelper = null;
-			List<String> itemsDueToday = new ArrayList<String>();
+			List<String> itemsDue = new ArrayList<String>();
+			//Get the notification before settings and use it to create items Due list
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			int notifyBefore = Integer.valueOf(prefs.getString("prefNotificationBefore", "0"));
 			try{
 				dbHelper = new DatabaseHelper(getApplicationContext(),null);
 				ArrayList<Item> allItems = (ArrayList<Item>)dbHelper.getAllItemsWithAllFields();
 				Date today = new Date();
+				//Update all items - reduce daysLeft by difference of today and lastUpdatedAt
 				for(Item i : allItems){
 					if(i.getDaysLeft() > 0){
 						long timeDiff = Math.abs(today.getTime() - i.getLastUpdatedAt().getTime());
@@ -82,8 +88,12 @@ public class ItemUpdateService extends Service {
 							i.setDaysLeft(daysLeft);
 							dbHelper.updateItem(i);
 						}
-					}else{
-						itemsDueToday.add(i.getName());
+					}
+				}
+				//Get Items due
+				for(Item i: allItems){
+					if(i.getDaysLeft() <= notifyBefore){
+						itemsDue.add(i.getName());
 					}
 				}
 			}catch(Exception e){
@@ -92,35 +102,35 @@ public class ItemUpdateService extends Service {
 				if(dbHelper != null)
 					dbHelper.close();
 			}
-			return itemsDueToday;
+			return itemsDue;
 		}
 		@Override
 		protected void onPostExecute(List<String> result) {
 			super.onPostExecute(result);
-			//Send notification
-			int itemsDue = result.size();
-			StringBuffer notificationText = new StringBuffer();
-			for(int i=0; i<itemsDue; i++){
-				if(i!=0)
-					notificationText.append(", ");
-				notificationText.append(result.get(i));				
+			//Notify only if user wants to be notified
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			boolean notificationEnabled = prefs.getBoolean("prefSendNotification", true); 
+			if(notificationEnabled){
+				int itemsDue = result.size();
+				StringBuffer notificationText = new StringBuffer();
+				for(int i=0; i<itemsDue; i++){
+					if(i!=0)
+						notificationText.append(", ");
+					notificationText.append(result.get(i));				
+				}
+				Context context = getApplicationContext();
+				NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
+				Intent notificationIntent = new Intent(context,ReminderActivity.class);
+				PendingIntent pi = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+				Notification n = new Notification.Builder(context)
+				.setContentTitle(String.valueOf(itemsDue) + " Items Due")
+				.setContentText(notificationText.toString())
+				.setSmallIcon(android.R.drawable.stat_notify_more)
+				//.setLargeIcon(R.drawable.ic_launcher)
+				.setContentIntent(pi)
+				.build();	 
+				nm.notify(0, n);
 			}
-			Context context = getApplicationContext();
-			NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
-			Intent notificationIntent = new Intent(context,ReminderActivity.class);
-			PendingIntent pi = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-			Notification n = new Notification.Builder(context)
-	         .setContentTitle(String.valueOf(itemsDue) + " Items Due Today")
-	         .setContentText(notificationText.toString())
-	         .setSmallIcon(android.R.drawable.stat_notify_more)
-	         //.setLargeIcon(R.drawable.ic_launcher)
-	         .setContentIntent(pi)
-	         .build();	 
-			/*Notification n = new Notification();
-			n.icon = android.R.drawable.stat_notify_sync;
-			n.tickerText = "Test";
-			n.when = System.currentTimeMillis();*/
-			nm.notify(0, n);
 			//stop the alarm
 			stopSelf();
 		}

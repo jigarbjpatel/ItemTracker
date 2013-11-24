@@ -90,9 +90,11 @@ public class ReminderActivity extends Activity {
 			Intent intent = new Intent(ReminderActivity.this, ItemsMaster.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(intent);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		}else if(item.getItemId() == R.id.action_settings){
+	    	Intent settingsIntent = new Intent(ReminderActivity.this, SettingsActivity.class);
+	    	startActivity(settingsIntent);
+	    }
+		return true;
 	}
 	private void updateDaysLeft(ArrayAdapter<Item> adapter, Item selectedItem, Date buyDate, int quantity) {
 		int daysLeft = quantity * selectedItem.getRemindDays();

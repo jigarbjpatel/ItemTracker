@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+ 
+    <PreferenceCategory android:title="@string/pref_notification" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefSendNotification"
+            android:summary="@string/pref_send_notification_summary"
+            android:title="@string/pref_send_notification" >
+        </CheckBoxPreference>
+        
+        <ListPreference
+            android:key="prefNotificationBefore"
+            android:entries="@array/notificationBefore"
+            android:summary="@string/pref_notification_before_summary"
+            android:entryValues="@array/notificationBeforeValues"
+            android:title="@string/pref_notification_before" />
+        <edu.cmu.jjpatel.itemtracker.TimePreference
+            android:key="prefNotificationTime"
+            android:title="@string/pref_notification_time" 
+            android:summary="@string/pref_notification_time_summary" 
+            android:defaultValue="17:00"/>
+    </PreferenceCategory>
+ 
+</PreferenceScreen>

@@ -1,13 +1,10 @@
 package edu.cmu.jjpatel.itemtracker;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -134,42 +131,58 @@ public class ItemsMaster extends Activity {
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    if(item.getTitle().equals("Track")){
+	    if(item.getItemId() == R.id.action_reminder){
 	    	Intent intent = new Intent(ItemsMaster.this, ReminderActivity.class);
 	    	intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 	    	startActivity(intent);
-	    	return true;
+	    	//return true;
+	    }else if(item.getItemId() == R.id.action_settings){
+	    	Intent settingsIntent = new Intent(ItemsMaster.this, SettingsActivity.class);
+	    	startActivity(settingsIntent); 
 	    }
-	    return super.onOptionsItemSelected(item);
+	    //return super.onOptionsItemSelected(item);
+	    return true;
 	}	
+	/*@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch(requestCode){
+			case 1:
+			//recreate the alarm if values changed
+			break;
+		}
+	};*/
 	@Override
 	public void onResume(){
 		super.onResume();
-		//re-create the alaram
-		createAlarm();
+		
+		Util.createAlarm(this, false);
 	}
 	/**
 	 * Creates new repeating alarm to trigger ItemUpdateService
 	 */
-	private void createAlarm() {
-		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-		Intent itemUpdateIntent = new Intent(this,ItemUpdateService.class);
+	/*private void createAlarm() {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		String notificationTime = prefs.getString("prefNotificationTime", "170000");
 		
+		Intent itemUpdateIntent = new Intent(this,ItemUpdateService.class);
+		//Create alarm only if not present
 		PendingIntent pi = PendingIntent.getService(this, 0, itemUpdateIntent,PendingIntent.FLAG_NO_CREATE);
 		//am.cancel(pi);
 		if(pi==null){
+			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 			pi = PendingIntent.getService(this, 0, itemUpdateIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 			//stop any current alarm
 			//am.cancel(pi);
 			//start new alarm
 			Calendar cal = Calendar.getInstance();
-			cal.set(Calendar.HOUR_OF_DAY,20);
-			cal.set(Calendar.MINUTE,00);
-			cal.set(Calendar.SECOND,00);
+			cal.set(Calendar.HOUR_OF_DAY,Integer.valueOf(notificationTime.substring(0, 1)));
+			cal.set(Calendar.MINUTE,Integer.valueOf(notificationTime.substring(2, 3)));
+			cal.set(Calendar.SECOND,Integer.valueOf(notificationTime.substring(4, 5)));
 			//Repeat the alarm every day
 			am.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24*60*60*1000, pi);
 		}
 		
 		//am.setInexactRepeating(AlarmManager.INTERVAL_DAY, triggerAtMillis, intervalMillis, operation)
-	}
+	}*/
 }

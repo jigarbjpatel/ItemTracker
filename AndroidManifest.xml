@@ -7,8 +7,10 @@
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="16" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -20,6 +22,7 @@
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,17 +37,20 @@
             android:enabled="true"
             android:exported="true" >
         </service>
-        <receiver 
-            android:name=".BootReceiver"
-            android:exported="true"
-            android:enabled="true">
+
+        <receiver
+            android:name="edu.cmu.jjpatel.itemtracker.BootReceiver"
+            android:enabled="true"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        
+
+        <activity
+            android:name="edu.cmu.jjpatel.itemtracker.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>
-
-
