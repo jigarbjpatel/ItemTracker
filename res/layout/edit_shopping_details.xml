@@ -3,23 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-<EditText
-  android:id="@+id/txtName"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:hint="@string/addItemHint">
-  <requestFocus />
-</EditText>
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity Bought" />
+  
 <EditText
-    android:id="@+id/txtRemindInDays"
+    android:id="@+id/txtQuantity"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ems="10"
     android:inputType="number" 
-    android:hint="@string/RemindInDays">
+    android:hint="@string/Quantity">
+    <requestFocus />
 </EditText>
+<TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buy Date" />
+<DatePicker
+    android:id="@+id/dpBuyDate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" 
+    android:calendarViewShown="false"
+    />
 
 <Button android:id="@+id/btnSaveItem"
   		android:layout_height="0dp"

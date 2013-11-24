@@ -1,6 +1,10 @@
 package edu.cmu.jjpatel.itemtracker;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,7 +15,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper{
 	private static final String DATABASE_NAME = "items.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String ITEM_TABLE = "itemsTable";
     
     public DatabaseHelper(Context context, CursorFactory factory) {
@@ -20,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     // SQL statement to create a new database.
     private static final String DATABASE_CREATE = "create table " + ITEM_TABLE + 
-      " (id integer primary key autoincrement, name text not null, remindDays integer, daysLeft integer);";
+      " (id integer primary key autoincrement, name text not null, remindDays integer, daysLeft integer, lastUpdatedAt date);";
 
     // Called when no database exists in disk and the helper class needs
     // to create a new one.
@@ -43,17 +47,21 @@ public class DatabaseHelper extends SQLiteOpenHelper{
       // values.
 
       // The simplest case is to drop the old table and create a new one.
-      db.execSQL("DROP TABLE IF IT EXISTS " + ITEM_TABLE);
+      db.execSQL("DROP TABLE IF EXISTS " + ITEM_TABLE);
       // Create a new one.
       onCreate(db);
     }
     
     void addItem(Item i){
+    
+    	Date today = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);    	
     	SQLiteDatabase db = this.getWritableDatabase();
     	ContentValues values = new ContentValues();
     	values.put("name", i.getName());
     	values.put("remindDays", i.getRemindDays());
     	values.put("daysLeft",i.getDaysLeft());
+    	values.put("lastUpdatedAt",sdf.format(today));
     	db.insert(ITEM_TABLE, null, values);
     	db.close();
     }
@@ -85,13 +93,33 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         }
         return itemList;
     }
-    
+    public List<Item> getAllItemsWithAllFields() {
+        List<Item> itemList = new ArrayList<Item>();
+        String selectQuery = "SELECT  id,name,remindDays,daysLeft,lastUpdatedAt FROM " + ITEM_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+            	Item i = new Item(Integer.parseInt(cursor.getString(0)),
+                        cursor.getString(1), Integer.parseInt(cursor.getString(2)));
+            	i.setDaysLeft(Integer.parseInt(cursor.getString(3)));
+            	try {
+					i.setLastUpdatedAt(new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH).parse(cursor.getString(4)));
+				} catch (ParseException e) {
+					Log.e("Parsing date error",e.getMessage());
+				}
+            	itemList.add(i);
+            } while (cursor.moveToNext());
+        }
+        return itemList;
+    }
     public int updateItem(Item i) {
         SQLiteDatabase db = this.getWritableDatabase(); 
         ContentValues values = new ContentValues();
         values.put("name", i.getName());
         values.put("remindDays", i.getRemindDays());
         values.put("daysLeft", i.getDaysLeft());
+        values.put("lastUpdatedAt", new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH).format(i.getLastUpdatedAt()));
         return db.update(ITEM_TABLE, values, "id = ?",
                 new String[] { String.valueOf(i.getId()) });
     }

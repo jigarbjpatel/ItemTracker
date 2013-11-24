@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ItemTracker</string>
+    <string name="app_name">Item Tracker</string>
     <string name="action_settings">Settings</string>
     <string name="action_reminder">Track</string>
     <string name="action_items_master">Items</string>
@@ -10,6 +10,11 @@
     <string name="addNewItemButton">Add New Item</string>
     <string name="saveItemButton">Save</string>
     <string name="RemindInDays">Remind in days</string>
-    <string name="title_activity_reminder">ReminderActivity</string>
-    
+    <string name="title_activity_reminder">Items Due</string>
+    <string name="title_activity_item_master">Items Master</string>
+    <string name="Today"> Today</string>
+    <string name="ThisWeek"> This Week</string>
+    <string name="Later"> Later</string>
+    <string name="Quantity">Quantity</string>
+    <string name="BuyDate">Buy date</string>
 </resources>

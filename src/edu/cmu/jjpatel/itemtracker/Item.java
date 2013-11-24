@@ -1,11 +1,18 @@
 package edu.cmu.jjpatel.itemtracker;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import android.util.Log;
+
 public class Item {
 	private String name;
 	private int remindDays;
 	private int id;
 	private int daysLeft;
-	
+	private Date lastUpdatedAt;
 	public Item(){
 		
 	}
@@ -44,6 +51,12 @@ public class Item {
 	}
 	public int getId() {
 		return id;
+	}
+	public Date getLastUpdatedAt() {
+		return this.lastUpdatedAt;
+	}
+	public void setLastUpdatedAt(Date value) {
+		this.lastUpdatedAt = value;
 	}
 	
 }

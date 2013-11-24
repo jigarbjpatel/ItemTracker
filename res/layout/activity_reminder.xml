@@ -13,8 +13,11 @@
         android:id="@+id/txtToday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#55000000"
-        android:text="Today" />
+        android:background="#99000000"
+        android:textColor="#FFFFFFFF"
+        android:text="@string/Today"
+        android:paddingLeft="5dp"
+        android:paddingBottom="3dp" />
     <ListView
         android:id="@+id/listToday"
         android:layout_width="match_parent"
@@ -24,8 +27,11 @@
         android:id="@+id/txtThisWeek"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#55000000"
-        android:text="This Week" />
+        android:background="#99000000"
+        android:textColor="#FFFFFFFF"
+        android:text="@string/ThisWeek" 
+        android:paddingLeft="5dp"
+        android:paddingBottom="3dp"/>
     <ListView
         android:id="@+id/listThisWeek"
         android:layout_width="match_parent"
@@ -35,8 +41,11 @@
         android:id="@+id/txtLater"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#55000000"
-        android:text="Later" />
+        android:background="#99000000"
+        android:textColor="#FFFFFFFF"
+        android:text="@string/Later" 
+        android:paddingLeft="5dp"
+        android:paddingBottom="3dp"/>
     <ListView
         android:id="@+id/listLater"
         android:layout_width="match_parent"

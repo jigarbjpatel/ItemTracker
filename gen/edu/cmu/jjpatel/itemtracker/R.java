@@ -24,22 +24,26 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int RelativeLayout01=0x7f08000b;
-        public static final int action_items=0x7f080012;
-        public static final int action_reminder=0x7f080010;
-        public static final int action_settings=0x7f080011;
+        public static final int RelativeLayout01=0x7f08000f;
+        public static final int action_items=0x7f080016;
+        public static final int action_reminder=0x7f080014;
+        public static final int action_settings=0x7f080015;
         public static final int btnAdd=0x7f080001;
         public static final int btnSaveItem=0x7f08000a;
-        public static final int itemDaysLeft=0x7f08000f;
-        public static final int itemName=0x7f08000c;
-        public static final int itemRemindDays=0x7f08000d;
+        public static final int dpBuyDate=0x7f08000e;
+        public static final int itemDaysLeft=0x7f080013;
+        public static final int itemName=0x7f080010;
+        public static final int itemRemindDays=0x7f080011;
         public static final int itemsListview=0x7f080000;
         public static final int listLater=0x7f080007;
         public static final int listThisWeek=0x7f080005;
         public static final int listToday=0x7f080003;
-        public static final int rlReminderItems=0x7f08000e;
+        public static final int rlReminderItems=0x7f080012;
+        public static final int textView1=0x7f08000b;
+        public static final int textView2=0x7f08000d;
         public static final int txtLater=0x7f080006;
         public static final int txtName=0x7f080008;
+        public static final int txtQuantity=0x7f08000c;
         public static final int txtRemindInDays=0x7f080009;
         public static final int txtThisWeek=0x7f080004;
         public static final int txtToday=0x7f080002;
@@ -48,15 +52,21 @@ public final class R {
         public static final int activity_items_master=0x7f030000;
         public static final int activity_reminder=0x7f030001;
         public static final int add_new_item=0x7f030002;
-        public static final int items_row_layout=0x7f030003;
-        public static final int reminder_items_row_layout=0x7f030004;
+        public static final int edit_shopping_details=0x7f030003;
+        public static final int items_row_layout=0x7f030004;
+        public static final int reminder_items_row_layout=0x7f030005;
     }
     public static final class menu {
         public static final int items_master=0x7f070000;
         public static final int reminder=0x7f070001;
     }
     public static final class string {
+        public static final int BuyDate=0x7f05000f;
+        public static final int Later=0x7f05000d;
+        public static final int Quantity=0x7f05000e;
         public static final int RemindInDays=0x7f050008;
+        public static final int ThisWeek=0x7f05000c;
+        public static final int Today=0x7f05000b;
         public static final int action_items_master=0x7f050003;
         public static final int action_reminder=0x7f050002;
         public static final int action_settings=0x7f050001;
@@ -65,6 +75,7 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int hello_world=0x7f050004;
         public static final int saveItemButton=0x7f050007;
+        public static final int title_activity_item_master=0x7f05000a;
         public static final int title_activity_reminder=0x7f050009;
     }
     public static final class style {

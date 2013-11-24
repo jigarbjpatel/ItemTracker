@@ -1,10 +1,13 @@
 package edu.cmu.jjpatel.itemtracker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -139,5 +142,34 @@ public class ItemsMaster extends Activity {
 	    }
 	    return super.onOptionsItemSelected(item);
 	}	
-	
+	@Override
+	public void onResume(){
+		super.onResume();
+		//re-create the alaram
+		createAlarm();
+	}
+	/**
+	 * Creates new repeating alarm to trigger ItemUpdateService
+	 */
+	private void createAlarm() {
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		Intent itemUpdateIntent = new Intent(this,ItemUpdateService.class);
+		
+		PendingIntent pi = PendingIntent.getService(this, 0, itemUpdateIntent,PendingIntent.FLAG_NO_CREATE);
+		//am.cancel(pi);
+		if(pi==null){
+			pi = PendingIntent.getService(this, 0, itemUpdateIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+			//stop any current alarm
+			//am.cancel(pi);
+			//start new alarm
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY,20);
+			cal.set(Calendar.MINUTE,00);
+			cal.set(Calendar.SECOND,00);
+			//Repeat the alarm every day
+			am.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24*60*60*1000, pi);
+		}
+		
+		//am.setInexactRepeating(AlarmManager.INTERVAL_DAY, triggerAtMillis, intervalMillis, operation)
+	}
 }
