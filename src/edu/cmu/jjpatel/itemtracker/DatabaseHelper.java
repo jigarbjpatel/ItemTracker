@@ -79,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
     public List<Item> getAllItems() {
         List<Item> itemList = new ArrayList<Item>();
-        String selectQuery = "SELECT  id,name,remindDays FROM " + ITEM_TABLE;
+        String selectQuery = "SELECT  id,name,remindDays,daysLeft FROM " + ITEM_TABLE;
  
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -87,7 +87,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         if (cursor.moveToFirst()) {
             do {
             	Item i = new Item(Integer.parseInt(cursor.getString(0)),
-                        cursor.getString(1), Integer.parseInt(cursor.getString(2)));
+                        cursor.getString(1), 
+                        Integer.parseInt(cursor.getString(2)),
+                        Integer.parseInt(cursor.getString(3)));
             	itemList.add(i);
             } while (cursor.moveToNext());
         }
@@ -101,8 +103,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         if (cursor.moveToFirst()) {
             do {
             	Item i = new Item(Integer.parseInt(cursor.getString(0)),
-                        cursor.getString(1), Integer.parseInt(cursor.getString(2)));
-            	i.setDaysLeft(Integer.parseInt(cursor.getString(3)));
+                        cursor.getString(1), 
+                        Integer.parseInt(cursor.getString(2)),
+                        Integer.parseInt(cursor.getString(3)));
             	try {
 					i.setLastUpdatedAt(new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH).parse(cursor.getString(4)));
 				} catch (ParseException e) {

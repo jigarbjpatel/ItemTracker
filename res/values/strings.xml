@@ -11,7 +11,7 @@
     <string name="saveItemButton">Save</string>
     <string name="RemindInDays">Remind in days</string>
     <string name="title_activity_reminder">Items Due</string>
-    <string name="title_activity_item_master">Items Master</string>
+    <string name="title_activity_item_master">Items Usage</string>
     <string name="Today"> Today</string>
     <string name="ThisWeek"> This Week</string>
     <string name="Later"> Later</string>

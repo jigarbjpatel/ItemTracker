@@ -1,6 +1,5 @@
 package edu.cmu.jjpatel.itemtracker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -28,18 +27,17 @@ public class ItemsMaster extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_items_master);
-		
+
+		ListView itemsListView = (ListView) findViewById(R.id.itemsListview);
+		registerForContextMenu(itemsListView);
+	}
+	public void init(){
 		ListView itemsListView = (ListView) findViewById(R.id.itemsListview);
 		dbHelper = new DatabaseHelper(this,null);
-		items = new ArrayList<Item>();
-		for(Item i : dbHelper.getAllItems()){
-			items.add(i);
-		}
+		items = dbHelper.getAllItemsWithAllFields();
 		int resId = R.layout.items_row_layout;
 		adapter = new ItemsArrayAdapter(this,resId,items);
 		itemsListView.setAdapter(adapter);
-		
-		registerForContextMenu(itemsListView);
 	}
 	public void addItem(View v){
 		final Dialog d = new Dialog(this);		  
@@ -71,29 +69,29 @@ public class ItemsMaster extends Activity {
 	//Called when the context menu is about to be shown
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
-	      super.onCreateContextMenu(menu, v, menuInfo);
-	      AdapterContextMenuInfo aInfo = (AdapterContextMenuInfo) menuInfo;
-	      selectedItem  =  (Item) adapter.getItem(aInfo.position);
-	      selectedItemPosition = aInfo.position;
-	      menu.setHeaderTitle("Options for " + selectedItem.getName());
-	      menu.add(1, 1, 1, "Edit");
-	      menu.add(1, 2, 2, "Delete");
-	  }
+		super.onCreateContextMenu(menu, v, menuInfo);
+		AdapterContextMenuInfo aInfo = (AdapterContextMenuInfo) menuInfo;
+		selectedItem  =  (Item) adapter.getItem(aInfo.position);
+		selectedItemPosition = aInfo.position;
+		menu.setHeaderTitle("Options for " + selectedItem.getName());
+		menu.add(1, 1, 1, "Edit");
+		menu.add(1, 2, 2, "Delete");
+	}
 	// This method is called when user selects an Item in the Context menu
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-	    int menuItemId = menuItem.getItemId();	    
-	    if(menuItemId == 2){
-	    	//Delete item
-	    	items.remove(selectedItemPosition);
-	    	dbHelper.deleteItem(selectedItem.getId());
-	    	adapter.notifyDataSetChanged();
-	    }else if(menuItemId ==1){
-	    	//show edit form
-	    	editItem();
-	    }
-	    //Toast.makeText(this, "Item id ["+itemId+"]", Toast.LENGTH_SHORT).show();
-	    return true;
+		int menuItemId = menuItem.getItemId();	    
+		if(menuItemId == 2){
+			//Delete item
+			items.remove(selectedItemPosition);
+			dbHelper.deleteItem(selectedItem.getId());
+			adapter.notifyDataSetChanged();
+		}else if(menuItemId ==1){
+			//show edit form
+			editItem();
+		}
+		//Toast.makeText(this, "Item id ["+itemId+"]", Toast.LENGTH_SHORT).show();
+		return true;
 	}
 	public void editItem(){
 		final Dialog d = new Dialog(this);		  
@@ -111,7 +109,20 @@ public class ItemsMaster extends Activity {
 				if(!itemName.isEmpty()){
 					Item i = items.get(selectedItemPosition);
 					i.setName(itemName);
-					i.setRemindDays(Integer.parseInt(txtRemindInDays.getText().toString()));
+					//Update DaysLeft based on current stock and new usage duration
+					int newUsageDuration = Integer.parseInt(txtRemindInDays.getText().toString());
+					int oldUsageDuration = i.getRemindDays();
+					if(oldUsageDuration != newUsageDuration){
+						float oldPerDayConsumption = (float)1/oldUsageDuration;
+						int currentStock = i.getDaysLeft();
+						int unitsOfItemAvailable = (int)Math.round((float)currentStock * oldPerDayConsumption); //Ignore truncation
+						float newPerDayConsumption = (float)1/newUsageDuration;
+						if(newPerDayConsumption != 0){
+							int daysLeft = (int)Math.round((float)unitsOfItemAvailable/newPerDayConsumption) ;
+							i.setDaysLeft(daysLeft);
+						}
+						i.setRemindDays(newUsageDuration);
+					}
 					items.set(selectedItemPosition, i);
 					dbHelper.updateItem(i);
 					adapter.notifyDataSetChanged();
@@ -131,17 +142,17 @@ public class ItemsMaster extends Activity {
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    if(item.getItemId() == R.id.action_reminder){
-	    	Intent intent = new Intent(ItemsMaster.this, ReminderActivity.class);
-	    	intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-	    	startActivity(intent);
-	    	//return true;
-	    }else if(item.getItemId() == R.id.action_settings){
-	    	Intent settingsIntent = new Intent(ItemsMaster.this, SettingsActivity.class);
-	    	startActivity(settingsIntent); 
-	    }
-	    //return super.onOptionsItemSelected(item);
-	    return true;
+		if(item.getItemId() == R.id.action_reminder){
+			Intent intent = new Intent(ItemsMaster.this, ReminderActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
+			//return true;
+		}else if(item.getItemId() == R.id.action_settings){
+			Intent settingsIntent = new Intent(ItemsMaster.this, SettingsActivity.class);
+			startActivity(settingsIntent); 
+		}
+		//return super.onOptionsItemSelected(item);
+		return true;
 	}	
 	/*@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -155,34 +166,8 @@ public class ItemsMaster extends Activity {
 	@Override
 	public void onResume(){
 		super.onResume();
-		
+		init();
 		Util.createAlarm(this, false);
 	}
-	/**
-	 * Creates new repeating alarm to trigger ItemUpdateService
-	 */
-	/*private void createAlarm() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		String notificationTime = prefs.getString("prefNotificationTime", "170000");
-		
-		Intent itemUpdateIntent = new Intent(this,ItemUpdateService.class);
-		//Create alarm only if not present
-		PendingIntent pi = PendingIntent.getService(this, 0, itemUpdateIntent,PendingIntent.FLAG_NO_CREATE);
-		//am.cancel(pi);
-		if(pi==null){
-			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			pi = PendingIntent.getService(this, 0, itemUpdateIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-			//stop any current alarm
-			//am.cancel(pi);
-			//start new alarm
-			Calendar cal = Calendar.getInstance();
-			cal.set(Calendar.HOUR_OF_DAY,Integer.valueOf(notificationTime.substring(0, 1)));
-			cal.set(Calendar.MINUTE,Integer.valueOf(notificationTime.substring(2, 3)));
-			cal.set(Calendar.SECOND,Integer.valueOf(notificationTime.substring(4, 5)));
-			//Repeat the alarm every day
-			am.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24*60*60*1000, pi);
-		}
-		
-		//am.setInexactRepeating(AlarmManager.INTERVAL_DAY, triggerAtMillis, intervalMillis, operation)
-	}*/
+
 }

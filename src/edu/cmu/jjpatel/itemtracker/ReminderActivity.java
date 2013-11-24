@@ -1,6 +1,5 @@
 package edu.cmu.jjpatel.itemtracker;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,17 +31,22 @@ public class ReminderActivity extends Activity {
 	ArrayAdapter<Item> adapterLater;
 	Item selectedItem;
 	ArrayAdapter<Item> selectedAdapter;
-	@Override
+	
+	/*@Override
 	protected void onStart() {
 		super.onStart();
+		init();
+	};*/
+	@Override
+	protected void onResume() {
+		super.onResume();
 		init();
 	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_reminder);
-		init();
-		//registerForContextMenu(todayList);
+		//init();
 	}
 	private void init(){
 		//bind to different lists
@@ -50,9 +54,7 @@ public class ReminderActivity extends Activity {
 		ItemClickListener icl = new ItemClickListener();
 		ItemLongClickListener longClickListener = new ItemLongClickListener();
 		dbHelper = new DatabaseHelper(this,null);
-		itemsToday = new ArrayList<Item>();
-		for(Item i : dbHelper.getAllItemsByDaysLeft(0,0))
-			itemsToday.add(i);
+		itemsToday =  dbHelper.getAllItemsByDaysLeft(0,0);
 
 		ListView todayList = (ListView) findViewById(R.id.listToday);		
 		adapterToday = new ReminderItemsArrayAdapter(this,resId,itemsToday);
@@ -60,18 +62,14 @@ public class ReminderActivity extends Activity {
 		todayList.setOnItemClickListener(icl);
 		todayList.setOnItemLongClickListener(longClickListener);
 
-		itemsThisWeek = new ArrayList<Item>();
-		for(Item i : dbHelper.getAllItemsByDaysLeft(1,6))
-			itemsThisWeek.add(i);
+		itemsThisWeek = dbHelper.getAllItemsByDaysLeft(1,6);
 		ListView thisWeekList = (ListView) findViewById(R.id.listThisWeek);		
 		adapterThisWeek = new ReminderItemsArrayAdapter(this,resId,itemsThisWeek);
 		thisWeekList.setAdapter(adapterThisWeek);
 		thisWeekList.setOnItemClickListener(icl);
 		thisWeekList.setOnItemLongClickListener(longClickListener);
 		
-		itemsLater = new ArrayList<Item>();
-		for(Item i : dbHelper.getAllItemsByDaysLeft(7,-1))
-			itemsLater.add(i);
+		itemsLater = dbHelper.getAllItemsByDaysLeft(7,-1);
 		ListView laterList = (ListView) findViewById(R.id.listLater);		
 		adapterLater = new ReminderItemsArrayAdapter(this,resId,itemsLater);
 		laterList.setAdapter(adapterLater);
@@ -129,7 +127,7 @@ public class ReminderActivity extends Activity {
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View rowView, final int position,long id) {
 			selectedAdapter = (ArrayAdapter<Item>) parent.getAdapter();
-			selectedItem = adapterToday.getItem(position);
+			selectedItem = selectedAdapter.getItem(position);
 			//Show the dialog 
 			final Dialog d =new Dialog(parent.getContext());
 			d.setTitle("Edit Shopping Details");
@@ -166,8 +164,4 @@ public class ReminderActivity extends Activity {
 		}
 
 	}
-	/*@Override
-	public void onCheckedChanged(CompoundButton chkItem, boolean isChecked) {
-		//TODO: 
-	}	*/
 }
