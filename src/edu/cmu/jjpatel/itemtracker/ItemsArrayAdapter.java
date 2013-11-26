@@ -8,7 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
+/**
+ * Custom Array Adapter to bind list of Item objects to ListView
+ * This is used by Items Master Activity (Item Usage)
+ * @author Jigar Patel
+ */
 public class ItemsArrayAdapter extends ArrayAdapter<Item>{
 	private Context context;
 	private List<Item> items;
@@ -21,9 +25,8 @@ public class ItemsArrayAdapter extends ArrayAdapter<Item>{
 	}
 	@Override
 	public View  getView (int position, View convertView, ViewGroup parent) {
-		// First let's verify the convertView is not null
 	    if (convertView == null) {
-	        // This a new view we inflate the new layout
+	        //This a new view, hence we inflate the new layout
 	        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	        convertView = inflater.inflate(resource, parent, false);
 	    }

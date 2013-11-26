@@ -6,7 +6,11 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
-
+/**
+ * Time Preference Widget used in Settings screen
+ * @author commonsguy
+ *
+ */
 public class TimePreference extends DialogPreference {
 	private int lastHour=0;
 	private int lastMinute=0;

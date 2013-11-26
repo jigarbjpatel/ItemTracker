@@ -5,16 +5,18 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.view.Menu;
-
-public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener{
+/**
+ * User Preferences Screen called when Settings button is clicked
+ * @author Jigar Patel
+ */
+public class SettingsActivity extends PreferenceActivity 
+	implements OnSharedPreferenceChangeListener{
 
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
-		
 	}
 	@Override
 	protected void onResume() {
@@ -29,17 +31,11 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		prefs.unregisterOnSharedPreferenceChangeListener(this);
 	}
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.settings, menu);
-		return true;
-	}
-
-	@Override
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-		//if notification time is change then recreate the alarm which fires the update service
-		if(key.equals("prefNotificationTime"))
+		if(key.equals("prefNotificationTime")){
+		//Notification Time has changed => Cancel current alarm and create new
 			Util.createAlarm(getApplicationContext(), true);
+		}
 	}
 
 }

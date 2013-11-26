@@ -8,7 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
+/**
+ * Custom Array Adapter of Item objects to bind to ListView
+ * Used by Reminder Activity (Items Due Screen)
+ * @author Jigar Patel
+ */
 public class ReminderItemsArrayAdapter extends ArrayAdapter<Item>{
 	private Context context;
 	private List<Item> items;
@@ -33,7 +37,6 @@ public class ReminderItemsArrayAdapter extends ArrayAdapter<Item>{
 		itemName.setText(i.getName());
 		daysLeft.setText(String.valueOf(i.getDaysLeft()));
 		//chkItem.setOnCheckedChangeListener((ReminderActivity)context);
-		//convertView.setTag(i.getId());
 		return convertView;
 	}
 }

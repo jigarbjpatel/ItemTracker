@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/QuantityBought"
-        android:inputType="number" 
-        android:paddingBottom="10dp">
+        android:inputType="numberDecimal"         android:paddingBottom="10dp">
 
         <requestFocus />
     </EditText>
