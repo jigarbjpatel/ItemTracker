@@ -125,8 +125,8 @@ public class ItemUpdateService extends Service {
 				Notification n = new Notification.Builder(context)
 				.setContentTitle(String.valueOf(itemsDue) + " Items Due")
 				.setContentText(notificationText.toString())
-				.setSmallIcon(android.R.drawable.stat_notify_more)
-				//.setLargeIcon(R.drawable.ic_launcher)
+				.setSmallIcon(R.drawable.ic_basket)
+				//.setLargeIcon(R.drawable.ic_basket)
 				.setContentIntent(pi)
 				.build();	 
 				nm.notify(0, n);

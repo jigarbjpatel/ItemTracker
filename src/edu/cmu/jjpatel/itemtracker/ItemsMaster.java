@@ -1,6 +1,9 @@
 package edu.cmu.jjpatel.itemtracker;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,6 +11,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +46,19 @@ public class ItemsMaster extends Activity {
 		int resId = R.layout.items_row_layout;
 		adapter = new ItemsArrayAdapter(this,resId,items);
 		itemsListView.setAdapter(adapter);
+		
+		/*AnimationSet set = new AnimationSet(true);
+        Animation animation = new AlphaAnimation(0.0f, 1.0f);
+        animation.setDuration(50);
+        set.addAnimation(animation);
+        animation = new TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0.0f,Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, -1.0f,Animation.RELATIVE_TO_SELF, 0.0f
+        );
+        animation.setDuration(100);
+        set.addAnimation(animation);
+        LayoutAnimationController controller = new LayoutAnimationController(set, 0.5f);
+        itemsListView.setLayoutAnimation(controller);*/
 	}
 	public void addItem(View v){
 		final Dialog d = new Dialog(this);		  
@@ -46,8 +67,14 @@ public class ItemsMaster extends Activity {
 		d.setCancelable(true);		  
 		final EditText txtName = (EditText) d.findViewById(R.id.txtName);
 		final EditText txtRemindInDays = (EditText) d.findViewById(R.id.txtRemindInDays);
-		Button b = (Button) d.findViewById(R.id.btnSaveItem);		  
-		b.setOnClickListener(new View.OnClickListener() {		  
+		Button btnCancel = (Button) d.findViewById(R.id.btnCancel);
+		btnCancel.setOnClickListener(new View.OnClickListener(){
+			public void onClick(View v){
+				d.dismiss();
+			}
+		});
+		Button btnSave = (Button) d.findViewById(R.id.btnSaveItem);		  
+		btnSave.setOnClickListener(new View.OnClickListener() {		  
 			public void onClick(View v) 	{	  
 				String itemName = txtName.getText().toString();
 				if(!itemName.isEmpty()){
@@ -55,6 +82,7 @@ public class ItemsMaster extends Activity {
 					i.setName(itemName);
 					i.setRemindDays(Integer.parseInt(txtRemindInDays.getText().toString()));
 					i.setDaysLeft(0);//set days left as 0 by default
+					i.setLastUpdatedAt(new Date()); //set last updted to todays date
 					items.add(i);
 					dbHelper.addItem(i);
 					adapter.notifyDataSetChanged();
@@ -102,8 +130,15 @@ public class ItemsMaster extends Activity {
 		final EditText txtRemindInDays = (EditText) d.findViewById(R.id.txtRemindInDays);
 		txtName.setText(selectedItem.getName());
 		txtRemindInDays.setText(String.valueOf(selectedItem.getRemindDays()));
-		Button b = (Button) d.findViewById(R.id.btnSaveItem);		  		
-		b.setOnClickListener(new View.OnClickListener() {		  
+			
+		Button btnCancel = (Button) d.findViewById(R.id.btnCancel);
+		btnCancel.setOnClickListener(new View.OnClickListener(){
+			public void onClick(View v){
+				d.dismiss();
+			}
+		});
+		Button btnSave = (Button) d.findViewById(R.id.btnSaveItem);		  		
+		btnSave.setOnClickListener(new View.OnClickListener() {		  
 			public void onClick(View v) 	{	  
 				String itemName = txtName.getText().toString();
 				if(!itemName.isEmpty()){
@@ -150,6 +185,8 @@ public class ItemsMaster extends Activity {
 		}else if(item.getItemId() == R.id.action_settings){
 			Intent settingsIntent = new Intent(ItemsMaster.this, SettingsActivity.class);
 			startActivity(settingsIntent); 
+		}else if(item.getItemId() == R.id.action_addnew){
+			addItem(this.findViewById(R.id.action_addnew));
 		}
 		//return super.onOptionsItemSelected(item);
 		return true;

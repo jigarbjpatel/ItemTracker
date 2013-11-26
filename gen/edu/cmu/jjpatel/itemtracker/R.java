@@ -25,29 +25,36 @@ public final class R {
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int ic_action_remove=0x7f020000;
+        public static final int ic_basket=0x7f020001;
+        public static final int ic_cab_done_holo=0x7f020002;
+        public static final int ic_cab_done_holo_light=0x7f020003;
+        public static final int ic_input_add=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
     }
     public static final class id {
-        public static final int RelativeLayout01=0x7f0a000f;
-        public static final int action_items=0x7f0a0016;
-        public static final int action_reminder=0x7f0a0014;
-        public static final int action_settings=0x7f0a0015;
+        public static final int RelativeLayout01=0x7f0a0010;
+        public static final int action_addnew=0x7f0a0015;
+        public static final int action_items=0x7f0a0018;
+        public static final int action_reminder=0x7f0a0016;
+        public static final int action_settings=0x7f0a0017;
         public static final int btnAdd=0x7f0a0001;
+        public static final int btnCancel=0x7f0a000b;
         public static final int btnSaveItem=0x7f0a000a;
-        public static final int dpBuyDate=0x7f0a000e;
-        public static final int itemDaysLeft=0x7f0a0013;
-        public static final int itemName=0x7f0a0010;
-        public static final int itemRemindDays=0x7f0a0011;
+        public static final int dpBuyDate=0x7f0a000f;
+        public static final int itemDaysLeft=0x7f0a0014;
+        public static final int itemName=0x7f0a0011;
+        public static final int itemRemindDays=0x7f0a0012;
         public static final int itemsListview=0x7f0a0000;
         public static final int listLater=0x7f0a0007;
         public static final int listThisWeek=0x7f0a0005;
         public static final int listToday=0x7f0a0003;
-        public static final int rlReminderItems=0x7f0a0012;
-        public static final int textView1=0x7f0a000b;
-        public static final int textView2=0x7f0a000d;
+        public static final int rlReminderItems=0x7f0a0013;
+        public static final int textView1=0x7f0a000c;
+        public static final int textView2=0x7f0a000e;
         public static final int txtLater=0x7f0a0006;
         public static final int txtName=0x7f0a0008;
-        public static final int txtQuantity=0x7f0a000c;
+        public static final int txtQuantity=0x7f0a000d;
         public static final int txtRemindInDays=0x7f0a0009;
         public static final int txtThisWeek=0x7f0a0004;
         public static final int txtToday=0x7f0a0002;
@@ -79,6 +86,7 @@ public final class R {
         public static final int addItemHint=0x7f060005;
         public static final int addNewItemButton=0x7f060006;
         public static final int app_name=0x7f060000;
+        public static final int cancelButton=0x7f060018;
         public static final int hello_world=0x7f060004;
         public static final int pref_notification=0x7f060015;
         public static final int pref_notification_before=0x7f060014;

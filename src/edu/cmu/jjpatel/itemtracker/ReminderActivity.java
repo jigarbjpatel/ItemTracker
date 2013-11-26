@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ReminderActivity extends Activity {
 	DatabaseHelper dbHelper;
@@ -61,13 +62,19 @@ public class ReminderActivity extends Activity {
 		todayList.setAdapter(adapterToday);		
 		todayList.setOnItemClickListener(icl);
 		todayList.setOnItemLongClickListener(longClickListener);
-
+		TextView tvToday = (TextView) findViewById(R.id.txtToday);
+		tvToday.setText(R.string.Today);
+		tvToday.append(" (" + itemsToday.size() + ")");
+		
 		itemsThisWeek = dbHelper.getAllItemsByDaysLeft(1,6);
 		ListView thisWeekList = (ListView) findViewById(R.id.listThisWeek);		
 		adapterThisWeek = new ReminderItemsArrayAdapter(this,resId,itemsThisWeek);
 		thisWeekList.setAdapter(adapterThisWeek);
 		thisWeekList.setOnItemClickListener(icl);
 		thisWeekList.setOnItemLongClickListener(longClickListener);
+		TextView tvThisWeek = (TextView) findViewById(R.id.txtThisWeek);
+		tvThisWeek.setText(R.string.ThisWeek);
+		tvThisWeek.append(" (" + itemsThisWeek.size() + ")");
 		
 		itemsLater = dbHelper.getAllItemsByDaysLeft(7,-1);
 		ListView laterList = (ListView) findViewById(R.id.listLater);		
@@ -75,6 +82,9 @@ public class ReminderActivity extends Activity {
 		laterList.setAdapter(adapterLater);
 		laterList.setOnItemClickListener(icl);
 		laterList.setOnItemLongClickListener(longClickListener);
+		TextView tvLater = (TextView) findViewById(R.id.txtLater);
+		tvLater.setText(R.string.ThisWeek);
+		tvLater.append(" (" + itemsLater.size() + ")");
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,8 +151,15 @@ public class ReminderActivity extends Activity {
 			int month = cal.get(Calendar.MONTH);
 			int day = cal.get(Calendar.DAY_OF_MONTH);
 			dpBuyDate.init(year, month, day, null);
-			Button b = (Button) d.findViewById(R.id.btnSaveItem);		  		
-			b.setOnClickListener(new View.OnClickListener() {		  
+			
+			Button btnCancel = (Button) d.findViewById(R.id.btnCancel);
+			btnCancel.setOnClickListener(new View.OnClickListener(){
+				public void onClick(View v){
+					d.dismiss();
+				}
+			});
+			Button btnSave = (Button) d.findViewById(R.id.btnSaveItem);		  		
+			btnSave.setOnClickListener(new View.OnClickListener() {		  
 				public void onClick(View v) 	{	  
 					int itemQuantity = Integer.parseInt(txtQuantity.getText().toString());
 					int day = dpBuyDate.getDayOfMonth();

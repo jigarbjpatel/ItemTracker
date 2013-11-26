@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/QuantityBought"
-        android:inputType="number" >
+        android:inputType="number" 
+        android:paddingBottom="10dp">
 
         <requestFocus />
     </EditText>
@@ -27,6 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
+        android:paddingTop="10dp"
         android:text="@string/BuyDate" />
 
     <DatePicker
@@ -34,12 +36,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:calendarViewShown="false" />
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
     <Button
         android:id="@+id/btnSaveItem"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="0.5"
-        android:text="@string/saveItemButton" />
-
+        android:background="#00ffffff"
+        android:textColor="#ff000000"
+        android:text="@string/saveItemButton"
+        android:drawableLeft="@drawable/ic_cab_done_holo_light" 
+        style="?android:attr/borderlessButtonStyle"/>
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:background="#00ffffff"
+        android:textColor="#ff000000"
+        android:drawableLeft="@drawable/ic_action_remove"
+        android:text="@string/cancelButton" 
+        style="?android:attr/borderlessButtonStyle"/>
+</LinearLayout>
 </LinearLayout>
