@@ -84,7 +84,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 				String errorMsg = ex.getMessage() != null ? ex.getMessage() : "Null Pointer Exception";
 				Log.e("getItem",errorMsg);
 			}
+			cursor.close();
 		}
+		db.close();
 		return i;
 	}
 	/**
@@ -111,7 +113,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 				}
 				itemList.add(i);
 			} while (cursor.moveToNext());
+			cursor.close();
 		}
+		db.close();
 		return itemList;
 	}
 	/**
@@ -127,8 +131,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		values.put("daysLeft", i.getDaysLeft());
 		values.put("lastUpdatedAt", 
 				new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH).format(i.getLastUpdatedAt()));
-		return db.update(ITEM_TABLE, values, "id = ?",
+		int numberOfRowsAffected = db.update(ITEM_TABLE, values, "id = ?",
 				new String[] { String.valueOf(i.getId()) });
+		db.close();
+		return numberOfRowsAffected;
 	}
 	/**
 	 * Delets the Item based on id
@@ -176,7 +182,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 				}
 				itemList.add(i);
 			} while (cursor.moveToNext());
+			cursor.close();
 		}
+		db.close();
 		return itemList;
 	}
 
