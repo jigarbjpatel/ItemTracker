@@ -1,5 +1,6 @@
 package edu.cmu.jjpatel.itemtracker;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -11,13 +12,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
+import android.view.Gravity;
+import android.widget.Toast;
+import android.content.SharedPreferences;
 /**
  * Collection of helper methods
  * @author Jigar Patel
  */
 public class Util{
 	static String DEFAULT_NOTIFICATION_TIME = "17:00";
+	public static final String PREFS_NAME = "PrivateKeyStore";
 	/**
 	 * Creates the notification alarm. This function gets called from multiple places. 
 	 * It creates a new alarm only if there is none existing or it is forced to create.
@@ -63,7 +67,7 @@ public class Util{
 		DatabaseHelper dbHelper = null;
 		try{
 			dbHelper = new DatabaseHelper(context,null);
-			//Do not update days left if it is alreay 0
+			//Do not update days left if it is already 0
 			if(i.getDaysLeft() > 0){
 				//Following time difference is required because update service may not run on certain day 
 				//(for example, phone is switched off for 2 days) 
@@ -71,7 +75,9 @@ public class Util{
 				long dayDiff = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
 				//Do not update if it is already updated today
 				if(dayDiff > 0){
-					int daysLeft = i.getDaysLeft() - (int)dayDiff;  
+					int daysLeft = i.getDaysLeft() - (int)dayDiff; 
+					if(daysLeft < 0) 
+						daysLeft = 0; //Do not allow -ve days Left
 					i.setLastUpdatedAt(today);
 					i.setDaysLeft(daysLeft);
 					dbHelper.updateItem(i);
@@ -84,5 +90,24 @@ public class Util{
 			if(dbHelper != null)
 				dbHelper.close();
 		}
+	}
+	/** Helper function - shows a Toast message for short duration */
+	public static void showMessage(Context context, String msg){
+		Toast t = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+		t.setGravity(Gravity.CENTER, 0, 0);
+		t.show();
+	}
+	public static void setProperty(Context context, String key, String value){
+		// We need an Editor object to make preference changes.
+		// All objects are from android.context.Context
+		SharedPreferences settings = context.getSharedPreferences(Util.PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString(key, value);
+		// Commit the edits!
+		editor.commit();
+	}
+	public static String getProperty(Context context, String key, String defaultValue) {
+		SharedPreferences settings = context.getSharedPreferences(Util.PREFS_NAME, 0);
+		return settings.getString(key, defaultValue);		
 	}
 }

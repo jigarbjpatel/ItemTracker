@@ -1,7 +1,11 @@
 package edu.cmu.jjpatel.itemtracker;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -25,6 +29,7 @@ import android.util.Log;
 public class ItemUpdateService extends Service {
 	//Used to ensure that service completes its run to prevent device from sleeping
 	private WakeLock mPartialWakeLock;
+	
 	public ItemUpdateService() {
 	}
 
@@ -89,8 +94,7 @@ public class ItemUpdateService extends Service {
 					//Use thread synchronized method
 					Util.updateCurrentStock(getApplicationContext(), i);
 				}
-				
-				//Get Items due
+
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 				//Indicates how many days before user should be notified  
 				int notifyBefore = Integer.valueOf(prefs.getString("prefNotificationBefore", "0"));
@@ -117,34 +121,58 @@ public class ItemUpdateService extends Service {
 			if(notificationEnabled){
 				notifyUser(result);
 			}
-			
+
 			//Stop the service
 			stopSelf();
 		}
 		/**
-		 * Notifies the user about items due
+		 * Notifies the user about items due (only if there is something to notify)
 		 * @param result List of items due
 		 */
 		private void notifyUser(List<String> result) {
-			int itemsDue = result.size();
-			StringBuffer notificationText = new StringBuffer();
-			for(int i=0; i<itemsDue; i++){
-				if(i!=0)
-					notificationText.append(", ");
-				notificationText.append(result.get(i));				
+			if(Util.getProperty(getApplicationContext(),"notificationTimeChanged","") == "true" 
+					|| !notifiedToday())
+			{
+				Util.setProperty(getApplicationContext(), "notificationTimeChanged", "false");
+				if(result.size() > 0){
+					int itemsDue = result.size();
+					StringBuffer notificationText = new StringBuffer();
+					for(int i=0; i<itemsDue; i++){
+						if(i!=0)
+							notificationText.append(", ");
+						notificationText.append(result.get(i));				
+					}
+					Context context = getApplicationContext();
+					NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
+					Intent notificationIntent = new Intent(context,ReminderActivity.class);
+					PendingIntent pi = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+					Notification n = new Notification.Builder(context)
+					.setContentTitle(String.valueOf(itemsDue) + " Items Due")
+					.setContentText(notificationText.toString())
+					.setSmallIcon(R.drawable.ic_basket)
+					//.setLargeIcon(R.drawable.ic_basket)
+					.setContentIntent(pi)
+					.build();	 
+					nm.notify(0, n);
+				}
+				SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+				Util.setProperty(getApplicationContext(), "ServiceLastRanOn",formatter.format(new Date()));
 			}
-			Context context = getApplicationContext();
-			NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
-			Intent notificationIntent = new Intent(context,ReminderActivity.class);
-			PendingIntent pi = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-			Notification n = new Notification.Builder(context)
-			.setContentTitle(String.valueOf(itemsDue) + " Items Due")
-			.setContentText(notificationText.toString())
-			.setSmallIcon(R.drawable.ic_basket)
-			//.setLargeIcon(R.drawable.ic_basket)
-			.setContentIntent(pi)
-			.build();	 
-			nm.notify(0, n);
+		}
+		private boolean notifiedToday(){
+			String serviceLastRanOn = Util.getProperty(getApplicationContext(),"ServiceLastRanOn", "");
+			if(serviceLastRanOn == "")
+				return false;
+			long timeDiff;
+			Date today = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+			try {
+				timeDiff = Math.abs(today.getTime() -  formatter.parse(serviceLastRanOn).getTime());
+				long dayDiff = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
+				if(dayDiff == 0)
+					return true;
+			} catch (ParseException e) {}
+			return false;
 		}
 	}
 }

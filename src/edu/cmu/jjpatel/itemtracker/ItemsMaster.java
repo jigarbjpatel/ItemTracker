@@ -97,19 +97,25 @@ public class ItemsMaster extends Activity {
 		btnSave.setOnClickListener(new View.OnClickListener() {		  
 			public void onClick(View v) 	{	  
 				String itemName = txtName.getText().toString();
-				if(!itemName.isEmpty()){
+				int newUsageDuration = -1;
+				try{
+					newUsageDuration = Integer.parseInt(txtRemindInDays.getText().toString());
+				}catch(NumberFormatException e){}
+				if(itemName.isEmpty())
+					Util.showMessage(d.getContext(), "Enter name of the item");
+				else if(newUsageDuration <= 0)
+					Util.showMessage(d.getContext(), "Enter positive numbers for usage duration");
+				else{
 					Item i=new Item();
 					i.setName(itemName);
-					i.setRemindDays(Integer.parseInt(txtRemindInDays.getText().toString()));
+					i.setRemindDays(newUsageDuration);
 					i.setDaysLeft(0);//set days left as 0 by default
 					i.setLastUpdatedAt(new Date()); //set last updted to todays date
 					items.add(i);
 					dbHelper.addItem(i);
 					adapter.notifyDataSetChanged();
-				}else{
-					//TODO: Notify the user to enter something
+					d.dismiss();
 				}
-				d.dismiss();		  
 			}		 
 		});		 
 		d.show();
@@ -167,11 +173,18 @@ public class ItemsMaster extends Activity {
 		btnSave.setOnClickListener(new View.OnClickListener() {		  
 			public void onClick(View v) 	{	  
 				String itemName = txtName.getText().toString();
-				if(!itemName.isEmpty()){
+				int newUsageDuration = -1;
+				try{
+					newUsageDuration = Integer.parseInt(txtRemindInDays.getText().toString());
+				}catch(NumberFormatException e){}
+				if(itemName.isEmpty())
+					Util.showMessage(d.getContext(), "Enter name of the item");
+				else if(newUsageDuration <= 0)
+					Util.showMessage(d.getContext(), "Enter positive numbers for usage duration");
+				else{
 					Item i = items.get(selectedItemPosition);
 					i.setName(itemName);
 					//Update DaysLeft based on current stock and new usage duration
-					int newUsageDuration = Integer.parseInt(txtRemindInDays.getText().toString());
 					int oldUsageDuration = i.getRemindDays();
 					if(oldUsageDuration != newUsageDuration){
 						float oldPerDayConsumption = (float)1/oldUsageDuration;
@@ -191,10 +204,8 @@ public class ItemsMaster extends Activity {
 					items.set(selectedItemPosition, i);
 					dbHelper.updateItem(i);
 					adapter.notifyDataSetChanged();
-				}else{
-					//TODO: Notify the user to enter some name
+					d.dismiss();
 				}
-				d.dismiss();		  
 			}		 
 		});		 
 		d.show();

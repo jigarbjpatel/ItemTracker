@@ -158,10 +158,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		int daysLeft = 0;
 
 		String selectQuery = "SELECT  id,name,remindDays,daysLeft,lastUpdatedAt FROM " + ITEM_TABLE;
-		if(daysLeftTo != -1)
-			selectQuery += " WHERE daysLeft >= "+daysLeftFrom+ " and daysLeft <= " + daysLeftTo;        		
-		else
-			selectQuery += " WHERE daysLeft >= "+daysLeftFrom;        
+		if(daysLeftFrom == -1 && daysLeftTo == 0)
+			selectQuery += " WHERE daysLeft <= 0";          		
+		else if(daysLeftFrom != -1 && daysLeftTo == -1)
+			selectQuery += " WHERE daysLeft >= "+daysLeftFrom;  
+		else if(daysLeftFrom != -1 && daysLeftTo != -1)
+			selectQuery += " WHERE daysLeft >= "+daysLeftFrom+ " and daysLeft <= " + daysLeftTo;
 		selectQuery += " ORDER BY daysLeft";
 
 		SQLiteDatabase db = this.getReadableDatabase();

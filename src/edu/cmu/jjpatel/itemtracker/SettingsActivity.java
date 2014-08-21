@@ -34,7 +34,8 @@ public class SettingsActivity extends PreferenceActivity
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 		if(key.equals("prefNotificationTime")){
 		//Notification Time has changed => Cancel current alarm and create new
-			Util.createAlarm(getApplicationContext(), true);
+			Util.setProperty(getApplicationContext(), "notificationTimeChanged", "true");
+			Util.createAlarm(getApplicationContext(), true);			
 		}
 	}
 

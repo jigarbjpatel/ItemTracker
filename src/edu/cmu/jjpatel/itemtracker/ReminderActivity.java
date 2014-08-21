@@ -57,7 +57,7 @@ public class ReminderActivity extends Activity {
 		ItemLongClickListener longClickListener = new ItemLongClickListener();
 		dbHelper = new DatabaseHelper(this,null);
 		
-		itemsToday =  dbHelper.getAllItemsByDaysLeft(0,0);
+		itemsToday =  dbHelper.getAllItemsByDaysLeft(-1,0);
 		//ListView todayList = (ListView) findViewById(R.id.listToday);		
 		adapterToday = new ReminderItemsArrayAdapter(this,resId,itemsToday);
 		/*todayList.setAdapter(adapterToday);		
@@ -149,9 +149,7 @@ public class ReminderActivity extends Activity {
 		if(buyDate != null){
 			long timeDiff = Math.abs(today.getTime() - buyDate.getTime());
 			long days = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
-			if(days!=0){
-				daysLeft = (int) (daysLeft - days);
-			}
+			daysLeft = (int) (daysLeft - days);			
 		}
 		//Before using current stock ensure that is is updated - 
 		// this is to prevent edge case when update service has not run for many days
