@@ -1,6 +1,5 @@
 package edu.cmu.jjpatel.itemtracker;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +13,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
-import android.content.SharedPreferences;
 /**
  * Collection of helper methods
  * @author Jigar Patel

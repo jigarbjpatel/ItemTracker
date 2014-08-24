@@ -18,3 +18,17 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontobfuscate
+# Preserve all fundamental application classes.
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.preference.DialogPreference
+-keep public class * extends android.widget.ArrayAdapter
+-keep public class * extends android.database.sqlite.SQLiteOpenHelper
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+}

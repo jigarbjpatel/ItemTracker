@@ -13,9 +13,10 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_basket"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+       >
         <activity
             android:name="edu.cmu.jjpatel.itemtracker.ItemsMaster"
             android:label="@string/title_activity_item_master"

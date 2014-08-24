@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -51,6 +52,8 @@ public class ReminderActivity extends Activity {
 	 * Initializes the items list and binds to list view
 	 */
 	private void init(){
+		NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+		notificationManager.cancel(1);
 		//bind to different lists
 		int resId = R.layout.reminder_items_row_layout;
 		ItemClickListener icl = new ItemClickListener();

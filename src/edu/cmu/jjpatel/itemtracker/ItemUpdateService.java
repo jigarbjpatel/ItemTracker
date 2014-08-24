@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Notification;
@@ -130,7 +131,7 @@ public class ItemUpdateService extends Service {
 		 * @param result List of items due
 		 */
 		private void notifyUser(List<String> result) {
-			if(Util.getProperty(getApplicationContext(),"notificationTimeChanged","") == "true" 
+			if(Util.getProperty(getApplicationContext(),"notificationTimeChanged","").equals("true") 
 					|| !notifiedToday())
 			{
 				Util.setProperty(getApplicationContext(), "notificationTimeChanged", "false");
@@ -145,27 +146,27 @@ public class ItemUpdateService extends Service {
 					Context context = getApplicationContext();
 					NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
 					Intent notificationIntent = new Intent(context,ReminderActivity.class);
-					PendingIntent pi = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+					PendingIntent pi = PendingIntent.getActivity(context, 0, notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 					Notification n = new Notification.Builder(context)
 					.setContentTitle(String.valueOf(itemsDue) + " Items Due")
 					.setContentText(notificationText.toString())
-					.setSmallIcon(R.drawable.ic_basket)
+					.setSmallIcon(R.drawable.ic_launcher)
 					//.setLargeIcon(R.drawable.ic_basket)
 					.setContentIntent(pi)
 					.build();	 
-					nm.notify(0, n);
+					nm.notify(1, n);
 				}
-				SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+				SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy",Locale.US);
 				Util.setProperty(getApplicationContext(), "ServiceLastRanOn",formatter.format(new Date()));
 			}
 		}
 		private boolean notifiedToday(){
 			String serviceLastRanOn = Util.getProperty(getApplicationContext(),"ServiceLastRanOn", "");
-			if(serviceLastRanOn == "")
+			if(serviceLastRanOn.equals(""))
 				return false;
 			long timeDiff;
 			Date today = new Date();
-			SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy",Locale.US);
 			try {
 				timeDiff = Math.abs(today.getTime() -  formatter.parse(serviceLastRanOn).getTime());
 				long dayDiff = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);

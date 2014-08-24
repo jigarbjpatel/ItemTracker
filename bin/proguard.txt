@@ -1,0 +1,21 @@
+# view AndroidManifest.xml #generated:42
+-keep class edu.cmu.jjpatel.itemtracker.BootReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:36
+-keep class edu.cmu.jjpatel.itemtracker.ItemUpdateService { <init>(...); }
+
+# view AndroidManifest.xml #generated:20
+-keep class edu.cmu.jjpatel.itemtracker.ItemsMaster { <init>(...); }
+
+# view AndroidManifest.xml #generated:30
+-keep class edu.cmu.jjpatel.itemtracker.ReminderActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:51
+-keep class edu.cmu.jjpatel.itemtracker.SettingsActivity { <init>(...); }
+
+# view res/xml/settings.xml #generated:18
+-keep class edu.cmu.jjpatel.itemtracker.TimePreference { <init>(...); }
+
+# onClick res/layout/activity_items_master.xml #generated:19
+-keepclassmembers class * { *** addItem(...); }
+
